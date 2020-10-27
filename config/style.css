@@ -23,6 +23,7 @@ header
     background-color: gold;
     position: fixed;
     width: 100%;
+    min-height: 90px;
 }
 
 .header-side
@@ -38,6 +39,33 @@ header
     width: 100px;
     text-align: center;
     margin: 0.3em;
+    padding: 0.2em;
     text-decoration: none;
     color: black;
+}
+
+.header-box:hover
+{
+    background-color: rgb(173, 130, 19);
+}
+
+footer
+{
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    height: 40px;
+    text-align: center;
+    background-color: lemonchiffon;
+}
+
+.content
+{
+    padding-top: 90px;
+    padding-bottom: 40px;
+}
+
+h4
+{
+    margin: 0px;
 }
