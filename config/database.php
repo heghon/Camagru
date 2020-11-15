@@ -1,7 +1,9 @@
 <?php
 
-    $DB_DSN = 'mysql:dbname=camagrudb;host=127.0.0.1';
-    $DB_USER = ;
-    $DB_PASSWORD = ;
+    $DB_NAME = "camagrudb";
+    $DB_HOST = "localhost";
+    $DB_DSN = "mysql:host=$DB_HOST;dbname=$DB_NAME";
+    $DB_USER = "root";
+    $DB_PASSWORD = "";
 
 ?>

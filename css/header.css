@@ -21,7 +21,6 @@ header
     justify-content: space-around;
     align-items: center;
     background-color: gold;
-    position: fixed;
     width: 100%;
     min-height: 90px;
 }
@@ -48,3 +47,8 @@ header
 {
     background-color: rgb(173, 130, 19);
 }
+
+.session-alert
+{
+}
+
