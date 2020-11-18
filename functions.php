@@ -5,11 +5,6 @@ function debug($variable) {
         echo "<pre>" . print_r($variable, true) . "</pre>";
 }
 
-function str_random($length) {
-    $alpha = "0123456789azertyuiopqsdfghjklmwxcvbnAERTYUIOPQSDFGHJKLMWXCVBN";
-    return substr(str_shuffle(str_repeat($alpha, $length)), 0, $length);
-}
-
 function forbidden_log() {
     if(!isset($_SESSION["auth"])) {
         $_SESSION["flash"]["danger"] = "Vous n'avez pas le droit d'accéder à cette page.";
@@ -19,6 +14,7 @@ function forbidden_log() {
 }
 
 function reconnect_cookie() {
+    
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
@@ -31,11 +27,14 @@ function reconnect_cookie() {
         $user_id = $parts[0];
 
         $request = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-        $request->execute($user_id);
+        $request->execute([$user_id]);
         $user = $request->fetch();
 
+        echo "user_id : " . $user->id . '\r\n';
+        echo "remember_token : " . $user->remember_token . '\r\n';
+
         if ($user) {
-            if ($_COOKIE["remember"] === "$user_id//$user->remember_token") {
+            if ($_COOKIE["remember"] === $user_id . "//" . $user->remember_token) {
                 $_SESSION["auth"] = $user;
                 setcookie("remember", $_COOKIE["remember"], time() + 60 * 60 * 24 * 7);
 

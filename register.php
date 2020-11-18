@@ -1,65 +1,25 @@
 <?php
 
-require_once "functions.php";
-require_once "config/db.php";
-
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+require_once "config/bootstrap.php";
 
 if(!empty($_POST)){
-
     $errors = array();
 
-    if(empty($_POST["username"]) || strlen($_POST["username"]) > 255 || !preg_match('@[A-Za-z0-9_-]@', $_POST["username"])){
-        $errors["username"] = "Votre nom d'utilisateur n'est pas valide - utilisez seulement des caractères alphanumériques, underscore et tiret";
-    } else {
-        $request = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $request->execute([$_POST["username"]]);
-        $user = $request->fetch();
-        if ($user) {
-            $errors["username"] = "Ce pseudo est déjà pris";
-        }
+    $db = App::getDatabase();
+
+    $validator = new Validator($_POST);
+    $validator->usernameValidator($db, "users");
+    $validator->emailValidator($db, "users");
+    $validator->passwordValidator();
+
+    if ($validator->isValid()) {
+        App::getAuth()->register($db, $_POST["username"], $_POST["email"], $_POST["password"]);
+        Session::getInstance()->setFlash("success", "Un email vous a été envoyé pour valider votre compte.");
+        App::redirect("index.php");
     }
-
-    if (empty($_POST["email"]) || strlen($_POST["email"]) > 255 || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
-        $errors["email"] = "Votre email n'est pas valide";
-    } else {
-        $request = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-        $request->execute([$_POST["email"]]);
-        $email = $request->fetch();
-        if ($email) {
-            $errors["email"] = "Cet email est déjà utilisé";
-        }
+    else {
+        $errors = $validator->getErrors();
     }
-
-    $uppercase = preg_match('@[A-Z]@', $_POST["password"]);
-    $lowercase = preg_match('@[a-z]@', $_POST["password"]);
-    $number    = preg_match('@[0-9]@', $_POST["password"]);
-
-    if(!$uppercase || !$lowercase || !$number || strlen($_POST["password"]) > 255 || strlen($_POST["password"]) < 8) {
-        $errors["password"] = "Vous devez rentrer un mot de passe valide : il doit contenir 8 caractères minimum, un nombre, une majuscule et une minuscule";
-    }
-
-    if ($_POST["password"] !== $_POST["password-confirm"]){
-        $errors["password-confirm"] = "Vous devez confirmer correctement votre mot de passe";
-    }
-
-    //debug($errors);
-
-    if (empty($errors)) {
-        $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
-        $request = $pdo->prepare("INSERT INTO users SET username = ?, email = ?, password = ?, confirmation_token = ?");
-        $token = str_random(60);
-        $request->execute([$_POST["username"], $_POST["email"], $password, $token]);
-        $user_id = $pdo->lastInsertId();
-        mail($_POST["email"], "Confirmation de votre inscription", "Bonjour et merci de vous être inscrit !\r\nPour confirmer votre inscription, veuillez cliquer sur le lien :\r\nhttp://camagru/confirm.php?id=$user_id&token=$token");
-        $_SESSION["flash"]["success"] = "Un email de confirmation vous a été envoyé pour valider votre compte.";
-        header("location: login.php");
-        exit();
-    }
-
-
 }
 ?>
 
@@ -104,7 +64,7 @@ if(!empty($_POST)){
             <form action="" method="POST">
                 <div class="form-group">
                     <label for="">Confirmer le mot de passe</label>
-                    <input type="password" name="password-confirm" />
+                    <input type="password" name="password_confirm" />
                 </div>
 
                 <button type="submit">Inscription</button>

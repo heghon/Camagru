@@ -1,7 +1,4 @@
 <?php 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 ?>
 
 <html lang="fr">
@@ -12,11 +9,11 @@ if (session_status() == PHP_SESSION_NONE) {
     <header>
         <div class="header-side">
             <a href="#" class="header-box">Galerie</a>
-            <a href="#" class="header-box">Montage</a>
+            <a href="assembly.php" class="header-box">Montage</a>
         </div>
         <h1><a href="index.php" id="website-title">Am'Stram'Gram</a></h1>
         <div class="header-side">
-            <?php if (isset($_SESSION['auth'])): ?>
+            <?php if (App::getAuth(Session::getInstance())->actualUser()): ?>
                 <a href="account.php" class="header-box">Compte</a>
                 <a href="logout.php" class="header-box">Déconnexion</a>
             <?php else: ?>    
@@ -26,13 +23,12 @@ if (session_status() == PHP_SESSION_NONE) {
         </div>
     </header>
 
-    <?php if(isset($_SESSION["flash"])): ?>
-        <?php foreach($_SESSION["flash"] as $type => $message): ?>
+    <?php if(Session::getInstance()->hasFlashes()): ?>
+        <?php foreach(Session::getInstance()->getFlashes() as $type => $message): ?>
             <div class="session-alert">
                 <?= $message; ?>
             </div>
         <?php endforeach; ?>
-        <?php unset($_SESSION["flash"]); ?>
     <?php endif; ?>
         
 </html>

@@ -1,4 +1,19 @@
 <?php
+require_once "config/bootstrap.php";
+if(!empty($_POST["email"])) {
+    $db = App::getDatabase();
+    $auth = App::getAuth();
+    $session = Session::getInstance();
+    if($auth->rebootPassword($db, $_POST["email"])) {
+        $session->setFlash("success", "Un email vous a été envoyé pour votre nouveau mot de passe.");
+        App::redirect("login.php");
+    }
+    else {
+        $session->setFlash("danger", "Désolé, aucun compte ne correspond à cette adresse mail.");
+        App::redirect("forget.php");
+    }
+}
+/*
     if(!empty($_POST["email"])) {
         require_once "functions.php";
         require_once "config/db.php";
@@ -25,6 +40,7 @@
             exit();
         }
     }
+    */
 ?>
 
 <html lang="fr">

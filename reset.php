@@ -1,40 +1,28 @@
 <?php
+require_once "config/bootstrap.php";
     if (isset($_GET["id"]) && isset($_GET["token"])) {
-
-        require_once "config/db.php";
-        require_once "functions.php";
-
-        $request = $pdo->prepare("SELECT * FROM users WHERE id = ? AND reset_token IS NOT NULL AND reset_token = ? AND reseted_at > DATE_SUB(NOW(), INTERVAL 30 MINUTE)");
-        $request->execute($_GET["id"], $_GET["token"]);
-        $user=$request->fetch();
-
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        $db = App::getDatabase();
+        $auth = App::getAuth();
+        Session::getInstance();
+        $user = $auth->checkResetToken($db, $_GET["id"], $_GET["token"]);
         if ($user) {
-
-            if (!empty($_POST["password"]) && $_POST["password"] === $_POST["password_confirm"]) {
+            $validator = new Validator($_POST);
+            $validator->passwordValidator($_POST["password"]);
+            if ($validator->isValid()) {
                 $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
-                $pdo->prepare("UPDATE users SET password = ?, reset_token = NULL")->execute($password);
-
-                $_SESSION["flash"]["success"] = "Votre mot de passe a bien été modifié";
-                $_SESSION["auth"] = $user;
-                header("Location: account.php");
-                exit();
+                $db->query("UPDATE users SET password = ?, reset_token = NULL WHERE id = ?", [$password, $user->id]);
+                $session->setFlash("success", "Votre mot de passe a bien été modifié.");
+                $auth->connect($user);
+                App::redirect("account.php");
             }
         }
-
         else {
-            $_SESSION["flash"]["danger"] = "Ce token n'est pas valide.";
-            header("Location: login.php");
-            exit();
+            $session->setFlash("danger", "Désolé, mais ce token n'est pas valide.");
+            App::redirect("login.php");
         }
     }
-
     else {
-        header("Location: index.php");
-        exit();
+        App::redirect("index.php");
     }
 ?>
 

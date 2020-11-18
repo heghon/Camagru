@@ -1,118 +1,89 @@
 <?php
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
+    require_once "config/bootstrap.php";
+    $session = Session::getInstance();
+    $auth = App::getAuth();
+    $db = App::getDatabase();
+    $validator = new Validator($_POST);
+    if ($auth->actualUser()) {
+        $auth->connect($db->query("SELECT * FROM users WHERE id = {$auth->actualUser()->id}")->fetch());
     }
+    $user = $auth->actualUser();
+    //var_dump($user);
+    //die();
 
-    require_once "functions.php";
-
-    forbidden_log();
+    $auth->restrict();
 
     if (!empty($_POST["password"])) {
-        if ($_POST["password"] != $_POST["password_confirm"]) {
-            $_SESSION["flash"]["danger"] = "Le mot de passe est vide ou a mal été validé.";
+        if ($_POST["password"] !== $_POST["password_confirm"]) {
+            $session->setFlash("danger", "Le mot de passe a mal été validé.");
+            App::redirect("account.php");
         } 
 
-        else if (!password_verify($_POST["password"], $_SESSION["auth"]->password)) {
-
-            $uppercase = preg_match('@[A-Z]@', $_POST["password"]);
-            $lowercase = preg_match('@[a-z]@', $_POST["password"]);
-            $number    = preg_match('@[0-9]@', $_POST["password"]);
-
-            if(!$uppercase || !$lowercase || !$number || strlen($_POST["password"]) > 255 || strlen($_POST["password"]) < 8) {
-                $_SESSION["flash"]["danger"] = "Vous devez rentrer un mot de passe valide : il doit contenir 8 caractères minimum, un nombre, une majuscule et une minuscule.";
-                header("Location: account.php");
-                exit();
-            }
-
-            $user_id = $_SESSION["auth"]->id;
-            $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
-            require_once "config/db.php";
-            $request = $pdo->prepare("UPDATE users SET password = ? WHERE id = $user_id")->execute([$password]);
-            $_SESSION["flash"]["success"] = "Votre mot de passe a bien été mis à jour.";
+        else if (password_verify($_POST["password"], $user->password)) {
+            $session->setFlash("danger", "Votre nouveau mot de passe doit être différent de l'ancien.");
         }
 
-        else {
-            $_SESSION["flash"]["danger"] = "Votre nouveau mot de passe doit être différent de l'ancien.";
+        else if (!password_verify($_POST["password"], $user->password)) {
+            $validator->passwordValidator();
+            if($validator->isValid()) {
+                $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+                $db->query("UPDATE users SET password = ? WHERE id = $user->id", [$password]);
+                $session->setFlash("success", "Votre mot de passe a bien été mis à jour.");
+                App::redirect("account.php");
+            }
+            else {
+                $session->setFlash("danger", "Vous devez rentrer un mot de passe valide : il doit contenir 8 caractères minimum, un nombre, une majuscule et une minuscule.");
+                App::redirect("account.php");
+            }
         }
     }
 
     if (!empty($_POST["username"])) {
-
-        if ($_POST["username"] !== $_SESSION["auth"]->username) {
-
-            if(strlen($_POST["username"]) > 255 || !preg_match('@[A-Za-z0-9_-]@', $_POST["username"])){
-                $_SESSION["flash"]["danger"] = "Votre nouveau nom d'utilisateur n'est pas valide - utilisez seulement des caractères alphanumériques, underscore et tiret";
-                header("Location: account.php");
-                exit();
+        if ($_POST["username"] !== $user->username) {
+            $validator->usernameValidator($db, "users");
+            if($validator->getErrors()["username"] === "Ce pseudo est déjà pris.") {
+                $session->setFlash("danger", "Ce nom d'utilisateur est déjà utilisé, merci d'en choisir un autre.");
+                App::redirect("account.php");
             }
-
+            else if ($validator->getErrors()["username"] === "Votre nom d'utilisateur n'est pas valide : il doit faire plus que 3 caractères et n'utilisez seulement que des caractères alphanumériques, underscore et tiret.") {
+                $session->setFlash("danger", "Votre nouveau nom d'utilisateur n'est pas valide : il doit faire plus que 3 caractères et n'utilisez seulement que des caractères alphanumériques, underscore et tiret.");
+                App::redirect("account.php");
+            }
             else {
-
-                require_once "config/db.php";
-
-                $request = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-                $request->execute([$_POST["username"]]);
-                $result = $request->fetch();
-
-                if ($result) {
-                    $_SESSION["flash"]["danger"] = "Votre nouveau nom d'utilisateur est déjà utilisé.";
-                    header("Location: account.php");
-                    exit();
-                }
-
-                else {
-                    $user_id = $_SESSION["auth"]->id;
-                    $request = $pdo->prepare("UPDATE users SET username = ? WHERE id = $user_id")->execute([$_POST["username"]]);
-                    $_SESSION["flash"]["success"] = "Votre nom d'utilisateur a bien été mis à jour.";
-
-                    $request = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-                    $request->execute([$_POST["username"]]);
-                    $user = $request->fetch();
-                    $_SESSION["auth"] = $user;
-                }
+                $db->query("UPDATE users SET username = ? WHERE id = $user->id", [$_POST["username"]]);
+                $session->setFlash("success", "Votre nom d'utilisateur a bien été mis à jour.");
+                App::redirect("account.php");
             }
         }
-
         else {
-            $_SESSION["flash"]["danger"] = "Votre nouveau nom d'utilisateur doit être différent de l'ancien.";
+            $session->setFlash("danger", "Votre nouveau nom d'utilisateur doit être différent de l'ancien.");
+            App::redirect("account.php");
         }
     }
 
     if (!empty($_POST["email"])) {
-
-        if ($_POST["email"] !== $_SESSION["auth"]->email) {
-
-            if (strlen($_POST["email"]) > 255 || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)){
-                $_SESSION["flash"]["danger"] = "Votre nouvel email n'est pas valide - utilisez une synthaxe correcte.";
-                header("Location: account.php");
-                exit();
-            }
-
-            else {
-
-                require_once "config/db.php";
-
-                $request = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-                $request->execute([$_POST["email"]]);
-                $result = $request->fetch();
-
-                if ($result) {
-                    $_SESSION["flash"]["danger"] = "Cette adresse mail est déjà utilisée, veuillez en prendre une autre.";
-                    header("Location: account.php");
-                    exit();
+        if ($_POST["email"] !== $user->email) {
+            $validator->emailValidator($db, "users");
+            if ($validator->isValid()) {
+                $used = $db->query("SELECT id FROM users WHERE email = ?", [$_POST["email"]])->fetch();
+                if ($used) {
+                    $session->setFlash("danger", "Cette adresse mail est déjà utilisée, veuillez en prendre une autre.");
+                    App::redirect("account.php");
                 }
-
                 else {
-                    $user_id = $_SESSION["auth"]->id;
-                    $request = $pdo->prepare("UPDATE users SET email = ? WHERE id = $user_id")->execute([$_POST["username"]]);
-                    $_SESSION["flash"]["success"] = "Votre adresse mail a bien été mise à jour.";
-
+                    $db->query("UPDATE users SET email = ? WHERE id = $user->id", [$_POST["email"]]);
+                    $session->setFlash("success", "Votre adresse mail a bien été mise à jour.");
+                    App::redirect("account.php");
                 }
+            }
+            else {
+                $session->setFlash("danger", "Votre nouvel email n'est pas valide - utilisez une synthaxe correcte.");
+                App::redirect("account.php");
             }
         }
-
         else {
-            $_SESSION["flash"]["danger"] = "Votre nouvel email doit être différent de l'ancien.";
+            $session->setFlash("danger", "Votre nouvelle adresse email doit être différente de l'ancienne.");
+            App::redirect("account.php");
         }
     }
 ?>
@@ -125,19 +96,7 @@
     </head>
     <?php require "elements/header.php" ?>
 
-        <h2>Bonjour <?= $_SESSION["auth"]->username;?></h2>
-
-        <div>
-            <form action="" method="post">
-                <div>
-                    <input type="password" name="password" placeholder="Nouveau mot de passe" id="">
-                </div>
-                <div>
-                    <input type="password" name="password_confirm" placeholder="Confirmation du nouveau mot de passe" id="">
-                </div>
-                <button type="submit">Changer de mot de passe</button>
-            </form>
-        </div>
+        <h2>Bonjour <?= $user->username;?></h2>
 
         <div>
             <form action="" method="post">
@@ -156,5 +115,18 @@
                 <button type="submit">Changer d'adresse email</button>
             </form>
         </div>
+        
+        <div>
+            <form action="" method="post">
+                <div>
+                    <input type="password" name="password" placeholder="Nouveau mot de passe" id="">
+                </div>
+                <div>
+                    <input type="password" name="password_confirm" placeholder="Confirmation du nouveau mot de passe" id="">
+                </div>
+                <button type="submit">Changer de mot de passe</button>
+            </form>
+        </div>
+
     <?php require "elements/footer.php" ?>
 </html>
