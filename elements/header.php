@@ -1,4 +1,5 @@
 <?php 
+$user = App::getAuth(Session::getInstance())->actualUser();
 ?>
 
 <html lang="fr">
@@ -9,11 +10,13 @@
     <header>
         <div class="header-side">
             <a href="#" class="header-box">Galerie</a>
-            <a href="assembly.php" class="header-box">Montage</a>
+            <?php if ($user): ?>
+                <a href="assembly.php" class="header-box">Montage</a>
+            <?php endif ?>
         </div>
         <h1><a href="index.php" id="website-title">Am'Stram'Gram</a></h1>
         <div class="header-side">
-            <?php if (App::getAuth(Session::getInstance())->actualUser()): ?>
+            <?php if ($user): ?>
                 <a href="account.php" class="header-box">Compte</a>
                 <a href="logout.php" class="header-box">Déconnexion</a>
             <?php else: ?>    

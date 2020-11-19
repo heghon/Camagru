@@ -21,37 +21,6 @@
             $session->setFlash("danger", "Identifiant ou mot de passe incorrect.");
             App::redirect("login.php");
         }
-        /*
-        require_once "config/db.php";
-
-        $request = $pdo->prepare("SELECT * FROM users WHERE username = :username OR email = :username AND confirmed_at IS NOT NULL");
-        $request->execute(["username" => $_POST["username"]]);
-        $user = $request->fetch();
-
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if($user && password_verify($_POST["password"], $user->password)) {
-            $_SESSION["auth"] = $user;
-            $_SESSION["flash"]["success"] = "Vous êtes bien connecté.";
-
-            $remember_token = str_random(200);
-
-            if ($_POST["remember"]) {
-                $request = $pdo->prepare("UPDATE users SET remember_token = ? WHERE id = ?")->execute([$remember_token, $user->id]);
-                setcookie("remember", $user->id . "//" . $remember_token, time() + 60 * 60 * 24 * 7);
-            }
-
-            header("Location: account.php");
-            exit();
-        }
-        else {
-            $_SESSION["flash"]["danger"] = "Identifiant ou mot de passe incorrect.";
-            header("Location: login.php");
-            exit();
-        }
-        */
     }
 ?>
 

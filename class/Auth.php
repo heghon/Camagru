@@ -35,10 +35,10 @@ class Auth {
 
     }
 
-    public function restrict() {
+    public function restrict($option = false) {
 
         if(!$this->session->read("auth")) {
-            $this->session->setFlash("danger" , $this->options["restriction_msg"]);
+            $option ? $this->session->setFlash("danger" , $this->options[$option]) : $this->session->setFlash("danger" , $this->options["restriction_msg"]);
             App::redirect("index.php");
         }
 
