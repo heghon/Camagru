@@ -14,16 +14,15 @@
         <?php require_once 'elements/header.php'; ?>
             <div class="content">
                 <h2>Zone de montage</h2>
-
-                <div class="select">
-                    <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+                <button>Start streaming</button>
+                <div class="video_wrap">
+                    <video id="video" playsinline autoplay muted></video>
                 </div>
-
-                <div class="select">
-                    <label for="videoSource">Video source: </label><select id="videoSource"></select>
+                <div class="controller">
+                    <button id="snap">Prendre une photo</button>
                 </div>
-
-                <video autoplay muted playsinline></video>
+                <canvas id="canvas"></canvas>
+                <img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
                 
         <?php require_once 'elements/footer.php'?>
         <script src="javascript/webcamHandler.js"></script>

@@ -1,10 +1,18 @@
-function hasGetUserMedia() {
-  return !!(navigator.mediaDevices &&
-    navigator.mediaDevices.getUserMedia);
-}
+(function () {
+  'use strict';
 
-if (hasGetUserMedia()) {
-  // Good to go!
-} else {
-  alert('getUserMedia() is not supported by your browser');
-}
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
+  const snap = document.getElementById("snap");
+
+  const constraints = {
+    audio: true,
+    audio: false
+  };
+  
+  document.querySelector('button').addEventListener('click', async (e) => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true
+    })
+  })
+}) ();
