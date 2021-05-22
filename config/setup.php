@@ -32,4 +32,21 @@
         PRIMARY KEY (`id`)
        ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
 
+    $db_tables->prepare("CREATE TABLE `pictures` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `name` varchar(255) NOT NULL,
+        `picture` blob NOT NULL,
+        `author` varchar(255) NOT NULL,
+        `likes` int(11) NOT NULL,
+        `date` DATE NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
+
+    $db_tables->prepare("CREATE TABLE `comments` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `picture` varchar(255) NOT NULL,
+        `author` varchar(255) NOT NULL,
+        `date` DATE NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
 ?>

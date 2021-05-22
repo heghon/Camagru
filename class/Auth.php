@@ -20,7 +20,7 @@ class Auth {
             $password,
             $token]);
         $user_id = $db->lastInsertedId();
-        mail($email, "Confirmation de votre inscription", "Bonjour et merci de vous être inscrit !\r\nPour confirmer votre inscription, veuillez cliquer sur le lien :\r\nhttp://camagru/confirm.php?id=$user_id&token=$token");
+        mail($email, "Confirmation de votre inscription", "Bonjour et merci de vous être inscrit !\r\nPour confirmer votre inscription, veuillez cliquer sur le lien :\r\nhttp://localhost/confirm.php?id=$user_id&token=$token", "From: Am'Stram'Gram");
     }
 
     public function confirm($db, $user_id, $token) {
@@ -32,7 +32,6 @@ class Auth {
             return true;
         } 
         return false;
-
     }
 
     public function restrict($option = false) {
@@ -99,7 +98,7 @@ class Auth {
         if($user) {
             $reset_token = Str::random(60);
             $db->query("UPDATE users SET reset_token = ?, reseted_at = NOW() WHERE id = ?", [$reset_token, $user->id]);
-            mail($email, "Am'Stram'Gram - redéfinition de votre mot de passe", "Bonjour, vous avez demandé à changer votre mot de passe.\r\nPour confirmer votre nouveau mot de passe, veuillez cliquer sur le lien :\r\nhttp://camagru/reset.php?id={$user->id}&token=$reset_token");
+            mail($email, "Am'Stram'Gram - redéfinition de votre mot de passe", "Bonjour, vous avez demandé à changer votre mot de passe.\r\nPour confirmer votre nouveau mot de passe, veuillez cliquer sur le lien :\r\nhttp://localhost/reset.php?id={$user->id}&token=$reset_token", "From: Am'Stram'Gram");
             return $user;
         }
         return false;

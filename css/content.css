@@ -8,10 +8,59 @@ body
     min-height: 100%;
     margin: 0;
     padding: 0;
+    /* background-color: black; */
     position: relative;
 }
 
-.content
+#assemblyUp
 {
-
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
 }
+
+#picContainer
+{
+    width: 30vw;
+    height: 30vw;
+    margin: 10vh;
+    border: 5px #333 solid;
+}
+
+#videoFeed
+{
+    width: 30vw;
+    height: 30vw;
+    background-color: #666;
+}
+
+#filterContainer
+{
+    height: 70vh;
+    width: 150px;
+    border: 5px rgb(252, 94, 2) solid;
+    background-color: rgb(218, 136, 106);
+    border-radius: 10px;
+}
+
+#picResultZone
+{
+    width: 150px;
+    height: 70vh;
+    border: 5px rgb(173, 1, 1) solid;
+    background-color: rgb(206, 94, 94);
+    border-radius: 10px;
+}
+
+#outputImage
+{
+    width: 30vw;
+    height: 30vw;
+    background-color: #666;
+}
+
+#webcamButton
+{
+    margin: 5px auto;
+}
+

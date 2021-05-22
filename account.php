@@ -8,7 +8,7 @@
         $auth->connect($db->query("SELECT * FROM users WHERE id = {$auth->actualUser()->id}")->fetch());
     }
     $user = $auth->actualUser();
-    //var_dump($user);
+    // var_dump($user);
     //die();
 
     $auth->restrict();

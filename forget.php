@@ -59,7 +59,7 @@ if(!empty($_POST["email"])) {
                         <input type="email" name="email" />
                     </div>
 
-                    <button type="submit">Login</button>
+                    <button type="submit">Envoyer</button>
 
                 </form>
             </div>
