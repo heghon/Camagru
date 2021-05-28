@@ -28,6 +28,12 @@ class Database{
         return $request;
     }
 
+    public function fetcher($query, $params) {
+        $request = $this->pdo->prepare($query);
+        $request->execute($params);
+        return($request->fetch(PDO::FETCH_COLUMN, 0));
+    }
+
     public function lastInsertedId() {
         return $this->pdo->lastInsertId();
     }

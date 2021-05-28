@@ -21,9 +21,9 @@
 
     $db_tables->prepare("CREATE TABLE `users` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `username` varchar(255) NOT NULL,
-        `email` varchar(255) NOT NULL,
-        `password` varchar(255) NOT NULL,
+        `username` VARCHAR(255) NOT NULL,
+        `email` VARCHAR(255) NOT NULL,
+        `password` VARCHAR(255) NOT NULL,
         `confirmation_token` VARCHAR (60) NULL,
         `confirmed_at` DATETIME NULL,
         `reset_token` VARCHAR (60) NULL,
@@ -34,9 +34,10 @@
 
     $db_tables->prepare("CREATE TABLE `pictures` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `name` varchar(255) NOT NULL,
-        `picture` blob NOT NULL,
-        `author` varchar(255) NOT NULL,
+        `name` VARCHAR(255) NOT NULL,
+        `mime`VARCHAR (255) NOT NULL,
+        `picture` MEDIUMBLOB NOT NULL,
+        `author` VARCHAR(255) NOT NULL,
         `likes` int(11) NOT NULL,
         `date` DATE NULL,
         PRIMARY KEY (`id`)
@@ -44,8 +45,8 @@
 
     $db_tables->prepare("CREATE TABLE `comments` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `picture` varchar(255) NOT NULL,
-        `author` varchar(255) NOT NULL,
+        `picture` VARCHAR(255) NOT NULL,
+        `author` VARCHAR(255) NOT NULL,
         `date` DATE NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();

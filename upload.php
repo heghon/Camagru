@@ -8,7 +8,7 @@ $picture = new Pictures($session);
 // (A) SET THE DESTINATION FOLDER
 $imageName = $_FILES["upimage"]["tmp_name"];
 
-$image_tmp = addslashes(file_get_contents($_FILES["upimage"]["tmp_name"]));
+$image_tmp = (file_get_contents($_FILES["upimage"]["tmp_name"]));
 
 $picture->uploadPicture($db, $auth->actualUser()->username, $image_tmp);
 // $destination = "uploaded.png";

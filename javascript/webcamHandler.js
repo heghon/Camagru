@@ -12,7 +12,10 @@
 var videoRunning = false;
 var videoElement = document.getElementById("videoFeed");
 var picElement = document.getElementById("outputImage");
+var insertImageButton = document.getElementById("insertImageButton");
 videoElement.style.display = "none";
+insertImageButton.style.display = "block";
+picElement.style.display = "block";
 
 window.addEventListener("load", function(){
   // ASK FOR USER PERMISSION TO ACCESS CAMERA AFTER CHECKING IF THE CAMERA WORKS
@@ -39,6 +42,7 @@ window.addEventListener("load", function(){
     videoRunning = true;
     videoElement.style.display = "block";
     picElement.style.display = "none";
+    insertImageButton.style.display = "none";
     // ENABLE DEMO BUTTONS
     // document.getElementById("picTake").onclick = picTake;
     // document.getElementById("picDown").onclick = picDown;
@@ -46,7 +50,7 @@ window.addEventListener("load", function(){
 
   // FAILURE - NO WEBCAM ATTACHED AND/OR NO PERMISSION
   .catch(function(err) {
-    alert("Please enable access and attach a webcam");
+    alert("Please enable access and/or attach a webcam");
   });
 });
 
@@ -100,26 +104,46 @@ function picDown () {
 }
 
 function picUp () {
-  
-  // CREATE SNAPSHOT FROM VIDEO
-  var canvas = document.createElement("canvas"),
-    side = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
-    image = videoRunning ? document.getElementById("videoFeed") : document.getElementById("outputImage"),
-    context2D = canvas.getContext("2d");
-  canvas.width = side;
-  canvas.height = side;
-  context2D.drawImage(image, 0, 0, side, side);
+  if(videoElement.style.display == "block" || (picElement.style.display == "block" && picElement.src))
+  {
+    // CREATE SNAPSHOT FROM VIDEO
+    var canvas = document.createElement("canvas"),
+      side = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
+      image = videoRunning ? document.getElementById("videoFeed") : document.getElementById("outputImage"),
+      context2D = canvas.getContext("2d");
 
-  // CONVERT TO BLOB + UPLOAD
-  canvas.toBlob(function(blob){
-    // FORM DATA
-    var data = new FormData();
-    data.append('upimage', blob);
-    // AJAX UPLOAD
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "upload.php");
-    xhr.onload = function(){ alert("Nice Pic Bro'"); };
-    xhr.send(data);
-  });
+    canvas.width = side;
+    canvas.height = side;
+    context2D.drawImage(image, 0, 0, side, side);
+
+
+    // CONVERT TO BLOB + UPLOAD
+    canvas.toBlob(function(blob){
+      // FORM DATA
+      var fd = new FormData();
+      fd.append('upimage', blob);
+
+      // AJAX UPLOAD
+      fetch('/upload.php', {method:"POST", body:fd})
+      .then(response => {
+        if (response.ok) return response;
+        else throw Error(`Server returned ${response.status}: ${response.statusText}`)
+      })
+      .then(response => console.log(response.text()))
+      .catch(err => {
+        alert(err);
+      });
+      // var xhr = new XMLHttpRequest();
+      // xhr.open('POST', "upload.php");
+      // xhr.onload = function(){ alert("Nice Pic Bro'"); };
+      // xhr.send(data);
+
+    });
+      // console.log("FILES = " + $_FILES["upimage"]["tmp_name"]);
+      setTimeout(function (){
+        location.reload();      
+      }, 1000);
+      
+  }
 }
 

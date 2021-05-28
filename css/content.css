@@ -43,6 +43,12 @@ body
     border-radius: 10px;
 }
 
+#assemblyUp h5
+{
+    margin: 1vh;
+    text-align: center;
+}
+
 #picResultZone
 {
     width: 150px;
@@ -50,6 +56,29 @@ body
     border: 5px rgb(173, 1, 1) solid;
     background-color: rgb(206, 94, 94);
     border-radius: 10px;
+}
+
+#picResults
+{
+    width: 120px;
+    height: 60vh;
+    margin-left: 25px;
+    margin-top: 10px;
+    overflow: auto;
+}
+
+.assemblyResultImage
+{
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    margin-top: -20px;
+}
+
+.deleteImageButton
+{
+    float: right;
+    position: relative;
 }
 
 #outputImage
