@@ -10,6 +10,7 @@
 //     });
 // } 
 var videoRunning = false;
+var filterElement = document.getElementById("positionnedFilter");
 var videoElement = document.getElementById("videoFeed");
 var picElement = document.getElementById("outputImage");
 var insertImageButton = document.getElementById("insertImageButton");
@@ -108,13 +109,17 @@ function picUp () {
   {
     // CREATE SNAPSHOT FROM VIDEO
     var canvas = document.createElement("canvas"),
-      side = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
+      elementWidth = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
+      elementHeight = videoRunning ? document.getElementById("videoFeed").clientHeight : document.getElementById("outputImage").clientHeight,
       image = videoRunning ? document.getElementById("videoFeed") : document.getElementById("outputImage"),
-      context2D = canvas.getContext("2d");
+      context2D = canvas.getContext("2d"),
+      filterWidth = document.getElementById("positionnedFilter").clientWidth,
+      filterHeight = document.getElementById("positionnedFilter").clientHeight;
 
-    canvas.width = side;
-    canvas.height = side;
-    context2D.drawImage(image, 0, 0, side, side);
+    canvas.width = elementWidth;
+    canvas.height = elementHeight;
+    context2D.drawImage(image, 0, 0, elementWidth, elementHeight);
+    context2D.drawImage(filterElement, (elementWidth / 2) - (filterWidth / 2), (elementHeight / 2) - (filterHeight / 2), filterWidth, filterHeight);
 
 
     // CONVERT TO BLOB + UPLOAD

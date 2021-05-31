@@ -11,7 +11,7 @@
     // var_dump($actualUserPseudo);
 
     $userIDs = $picture->getUserPicsID($db, $actualUserPseudo);
-    var_dump($userIDs);
+    // var_dump($userIDs);
 
     // SET THE DESTINATION FOLDER
     // $source = $_FILES["upimage"]["tmp_name"];
@@ -33,10 +33,20 @@
             <section id="assemblyUp">
                 <aside id="filterContainer">
                     <h5>Filtres</h5>
+                    <div id="filters">
+                        <input type="image" onClick="putFilter('1')" class="filterClass" id="filter1" alt="Cadre1" src="/filters/Cadre1.png">
+                        <input type="image" onClick="putFilter('2')" class="filterClass" id="filter2" alt="Cadre2" src="/filters/Cadre2.png">
+                        <input type="image" onClick="putFilter('3')" class="filterClass" id="filter3" alt="Cadre3" src="/filters/Cadre3.png">
+                        <input type="image" onClick="putFilter('4')" class="filterClass" id="filter4" alt="Cadre4" src="/filters/Cadre4.png">
+                        <input type="image" onClick="putFilter('5')" class="filterClass" id="filter5" alt="Cadre5" src="/filters/Cadre5.png">
+                        <input type="image" onClick="putFilter('6')" class="filterClass" id="filter6" alt="Cadre6" src="/filters/Cadre6.png">
+                    </div>
                 </aside>
                 <div id="picContainer">
+                    <!-- <canvas id="canvas"></canvas> -->
                     <img id="outputImage"/>
                     <video autoplay="true" id="videoFeed"></video>
+                    <img src="" id="positionnedFilter"/>
                     <div id="webcamButton">
                         <input id="picUp" type="button" value="Say Cheese !"/>
                     </div>
@@ -56,6 +66,7 @@
             </section>
             
         <?php require_once 'elements/footer.php'?>
+        <script src="javascript/filterHandler.js"></script>
         <script src="javascript/webcamHandler.js"></script>
         <script src="javascript/pictureDeleter.js"></script>
     </body>

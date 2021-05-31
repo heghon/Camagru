@@ -1,7 +1,7 @@
-console.log(document.getElementsByClassName("deleteImageButton"));
+// console.log(document.getElementsByClassName("deleteImageButton"));
 
 function deleteImage(id) {
-    console.log(id);
+    // console.log(id);
     fetch('/deleteImage.php?id=' + id + '', {method:"GET"})
     .then(response => {
       if (response.ok) return response;
