@@ -4,6 +4,6 @@ $session = Session::getInstance();
 $db = App::getDatabase();
 $picture = new Pictures($session);
 
-$id =  $_GET["id"];
+$id =  htmlentities($_GET["id"], ENT_QUOTES);
 
 $picture->deleteImage($db, $id);

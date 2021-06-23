@@ -29,6 +29,7 @@
         `reset_token` VARCHAR (60) NULL,
         `reseted_at` DATETIME NULL,
         `remember_token` VARCHAR (255) NULL,
+        `send_mail_comment` TINYINT(1) NOT NULL,
         PRIMARY KEY (`id`)
        ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
 
@@ -38,16 +39,23 @@
         `mime`VARCHAR (255) NOT NULL,
         `picture` MEDIUMBLOB NOT NULL,
         `author` VARCHAR(255) NOT NULL,
-        `likes` int(11) NOT NULL,
         `date` DATE NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
 
     $db_tables->prepare("CREATE TABLE `comments` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
-        `picture` VARCHAR(255) NOT NULL,
+        `pictureID` int(11) NOT NULL,
         `author` VARCHAR(255) NOT NULL,
+        `comment` VARCHAR(255) NOT NULL,
         `date` DATE NULL,
+        PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
+
+    $db_tables->prepare("CREATE TABLE `likes` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `pictureID` int(11) NOT NULL,
+        `userID` int(11) NOT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8")->execute();
 ?>

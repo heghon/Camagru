@@ -4,19 +4,19 @@ require_once "config/bootstrap.php";
         $db = App::getDatabase();
         $auth = App::getAuth();
         $session = Session::getInstance();
-        $user = $auth->checkResetToken($db, $_GET["id"], $_GET["token"]);
+        $user = $auth->checkResetToken($db, htmlentities($_GET["id"], ENT_QUOTES), htmlentities($_GET["token"], ENT_QUOTES));
         if ($user) {
             if (isset($_POST["password"])) {
                 $validator = new Validator($_POST);
-                $validator->passwordValidator($_POST["password"]);
-                if ($validator->isValid() && !password_verify($_POST["password"], $user->password)) {
-                    $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
+                $validator->passwordValidator(htmlentities($_POST["password"], ENT_QUOTES));
+                if ($validator->isValid() && !password_verify(htmlentities($_POST["password"], ENT_QUOTES), $user->password)) {
+                    $password = password_hash(htmlentities($_POST["password"], ENT_QUOTES), PASSWORD_BCRYPT);
                     $db->query("UPDATE users SET password = ?, reset_token = NULL WHERE id = ?", [$password, $user->id]);
                     $session->setFlash("success", "Votre mot de passe a bien été modifié.");
                     $auth->connect($user);
                     App::redirect("account.php");
                 }
-                else if (password_verify($_POST["password"], $user->password)) {
+                else if (password_verify(htmlentities($_POST["password"], ENT_QUOTES), $user->password)) {
                     $session->setFlash("danger", "Le mot de passe doit être différent de l'ancien");
                 }
                 else {
@@ -42,23 +42,21 @@ require_once "config/bootstrap.php";
     <body>
         <?php require_once 'elements/header.php'; ?>
             <div class="content">
-            <h1>Réinitialisation du mot de passe</h1>
+                <h1 class="page-title">Réinitialisation du mot de passe</h1>
+                <div class="form-div">
+                    <form action="" method="POST" class="account-form">
+                        <div class="form-group">
+                            <label for="">Nouveau mot de passe</label>
+                            <input type="password" name="password" />
+                        </div>
+                        <div class="form-group">
+                            <label for="">Confirmation du nouveau mot de passe</label>
+                            <input type="password" name="password_confirm" />
+                        </div>
 
-                <form action="" method="POST">
-                    <div class="form-group">
-                        <label for="">Nouveau mot de passe</label>
-                        <input type="password" name="password" />
-                    </div>
-
-                    <form action="" method="POST">
-                    <div class="form-group">
-                        <label for="">Confirmation du nouveau mot de passe</label>
-                        <input type="password" name="password_confirm" />
-                    </div>
-
-                    <button type="submit">Confirmer</button>
-
-                </form>
+                        <button type="submit">Confirmer</button>
+                    </form>
+                </div>
             </div>
         <?php require_once 'elements/footer.php'?>
     </body>

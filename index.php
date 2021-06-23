@@ -11,30 +11,9 @@ require_once "config/bootstrap.php";
     <body>
         <?php require_once 'config/setup.php';?>
         <?php require_once 'elements/header.php'; ?>
-        <div class="content">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, ea. Dolor, voluptatum fugiat. Magnam eos dignissimos explicabo, culpa mollitia assumenda? Reiciendis ut sapiente pariatur dolorem distinctio. Voluptatum fuga libero a.</p>
-        </div>
+            <div class="content" id="index-page">
+                <img src="/filters/welcomeSign.png" alt="" id="welcome-sign">
+            </div>
         <?php require_once 'elements/footer.php'?>
     </body>
 </html>

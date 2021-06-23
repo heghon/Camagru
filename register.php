@@ -13,7 +13,7 @@ if(!empty($_POST)){
     $validator->passwordValidator();
 
     if ($validator->isValid()) {
-        App::getAuth()->register($db, $_POST["username"], $_POST["email"], $_POST["password"]);
+        App::getAuth()->register($db, htmlentities($_POST["username"], ENT_QUOTES), htmlentities($_POST["email"], ENT_QUOTES), htmlentities($_POST["password"], ENT_QUOTES));
         Session::getInstance()->setFlash("success", "Un email vous a été envoyé pour valider votre compte.");
         App::redirect("index.php");
     }
@@ -32,7 +32,7 @@ if(!empty($_POST)){
     <body>
         <?php require_once 'elements/header.php'; ?>
         <div class="content">
-            <h1>Inscription</h1>
+            <h1 class="page-title">Inscription</h1>
 
             <?php if (!empty($errors)): ?>
                 <div class="alert">
@@ -43,33 +43,32 @@ if(!empty($_POST)){
                 </div>
             <?php endif ?>
 
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="">Nom d'utilisateur</label>
-                    <input type="text" name="username" />
-                </div>
+            <div class = "form-div">
+                <form action="" method="POST" id="register-form">
+                    <div class="form-group">
+                        <label for="">Nom d'utilisateur</label>
+                        <input type="text" name="username" />
+                    </div>
 
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="">Adresse mail</label>
-                    <input type="email" name="email" />
-                </div>
+                    <div class="form-group">
+                        <label for="">Adresse mail</label>
+                        <input type="email" name="email" />
+                    </div>
 
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="">Mot de passe</label>
-                    <input type="password" name="password" />
-                </div>
+                    <div class="form-group">
+                        <label for="">Mot de passe</label>
+                        <input type="password" name="password" />
+                    </div>
 
-            <form action="" method="POST">
-                <div class="form-group">
-                    <label for="">Confirmer le mot de passe</label>
-                    <input type="password" name="password_confirm" />
-                </div>
+                    <div class="form-group">
+                        <label for="">Confirmer le mot de passe</label>
+                        <input type="password" name="password_confirm" />
+                    </div>
 
-                <button type="submit">Inscription</button>
+                    <button type="submit">Inscription</button>
 
-            </form>
+                </form>
+            </div>
         </div>
         <?php require_once 'elements/footer.php'?>
     </body>

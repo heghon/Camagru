@@ -50,7 +50,6 @@ function reconnect_cookie() {
             }
         }
     }
-
     else {
         setcookie("remember", null, time() - 1);
     }

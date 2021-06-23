@@ -46,7 +46,7 @@
                     <!-- <canvas id="canvas"></canvas> -->
                     <img id="outputImage"/>
                     <video autoplay="true" id="videoFeed"></video>
-                    <img src="" id="positionnedFilter"/>
+                    <img id="positionnedFilter"/>
                     <div id="webcamButton">
                         <input id="picUp" type="button" value="Say Cheese !"/>
                     </div>

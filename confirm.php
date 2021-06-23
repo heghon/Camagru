@@ -3,7 +3,7 @@
 
     $db = App::getDatabase();
 
-    if (App::getAuth()->confirm($db, $_GET["id"], $_GET["token"], Session::getInstance())) {
+    if (App::getAuth()->confirm($db, htmlentities($_GET["id"], ENT_QUOTES), htmlentities($_GET["token"], ENT_QUOTES), Session::getInstance())) {
         Session::getInstance()->setFlash("success", "Votre compte a bien été validé.");
         App::redirect("account.php");
     } 

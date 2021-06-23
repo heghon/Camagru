@@ -4,7 +4,7 @@ if(!empty($_POST["email"])) {
     $db = App::getDatabase();
     $auth = App::getAuth();
     $session = Session::getInstance();
-    if($auth->rebootPassword($db, $_POST["email"])) {
+    if($auth->rebootPassword($db, htmlentities($_POST["email"], ENT_QUOTES))) {
         $session->setFlash("success", "Un email vous a été envoyé pour votre nouveau mot de passe.");
         App::redirect("login.php");
     }
@@ -14,11 +14,11 @@ if(!empty($_POST["email"])) {
     }
 }
 /*
-    if(!empty($_POST["email"])) {
+    if(!empty(htmlentities($_POST["email"], ENT_QUOTES))) {
         require_once "functions.php";
         require_once "config/db.php";
         $request = $pdo->prepare("SELECT * FROM users WHERE email = :email AND confirmed_at IS NOT NULL");
-        $request->execute(["email" => $_POST["email"]]);
+        $request->execute(["email" => htmlentities($_POST["email"], ENT_QUOTES)]);
         $user = $request->fetch();
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -28,7 +28,7 @@ if(!empty($_POST["email"])) {
             $reset_token = str_random(60);
             $pdo->prepare("UPDATE users SET reset_token = ?, reseted_at = NOW() WHERE id = ?")->execute([$reset_token, $user->id]);
 
-            mail($_POST["email"], "Am'Stram'Gram - redéfinition de votre mot de passe", "Bonjour, vous avez demandé à changer votre mot de passe.\r\nPour confirmer votre nouveau mot de passe, veuillez cliquer sur le lien :\r\nhttp://camagru/reset.php?id={$user->id}&token=$reset_token");
+            mail(htmlentities($_POST["email"], ENT_QUOTES), "Am'Stram'Gram - redéfinition de votre mot de passe", "Bonjour, vous avez demandé à changer votre mot de passe.\r\nPour confirmer votre nouveau mot de passe, veuillez cliquer sur le lien :\r\nhttp://camagru/reset.php?id={$user->id}&token=$reset_token");
 
             $_SESSION["flash"]["success"] = "Un email vous a été envoyé pour votre nouveau mot de passe.";
             header("Location: login.php");
@@ -51,17 +51,18 @@ if(!empty($_POST["email"])) {
     <body>
         <?php require_once 'elements/header.php'; ?>
             <div class="content">
-            <h1>Mot de passe oublié</h1>
+                <h1 class="page-title">Mot de passe oublié</h1>
+                <div class="form-div">
+                    <form action="" method="POST" class="account-form">
+                        <div class="form-group">
+                            <label for="">adresse email</label>
+                            <input type="email" name="email" />
+                        </div>
 
-                <form action="" method="POST">
-                    <div class="form-group">
-                        <label for="">adresse email</label>
-                        <input type="email" name="email" />
-                    </div>
+                        <button type="submit">Envoyer</button>
 
-                    <button type="submit">Envoyer</button>
-
-                </form>
+                    </form>
+                </div>
             </div>
         <?php require_once 'elements/footer.php'?>
     </body>

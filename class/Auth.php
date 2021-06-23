@@ -14,11 +14,12 @@ class Auth {
     public function register($db, $username, $email, $password) {
         $password = password_hash($password, PASSWORD_BCRYPT);
         $token = Str::random(60);
-        $db->query("INSERT INTO users SET username = ?, email = ?, password = ?, confirmation_token = ?", [
+        $db->query("INSERT INTO users SET username = ?, email = ?, password = ?, confirmation_token = ?, send_mail_comment = ?", [
             $username, 
             $email, 
             $password,
-            $token]);
+            $token, 
+            1]);
         $user_id = $db->lastInsertedId();
         mail($email, "Confirmation de votre inscription", "Bonjour et merci de vous être inscrit !\r\nPour confirmer votre inscription, veuillez cliquer sur le lien :\r\nhttp://localhost/confirm.php?id=$user_id&token=$token", "From: Am'Stram'Gram");
     }
@@ -27,7 +28,7 @@ class Auth {
 
         $user = $db->query("SELECT * FROM users WHERE id = ?", [$user_id])->fetch();
         if ($user && $user->confirmation_token === $token) {
-            $db->query("UPDATE users SET confirmation_token = NULL, confirmed_at = NOW(), id = ?", [$user_id]);
+            $db->query("UPDATE users SET confirmation_token = NULL, confirmed_at = NOW() WHERE id = ?", [$user_id]);
             $this->session->write("auth", $user);
             return true;
         } 
@@ -41,6 +42,24 @@ class Auth {
             App::redirect("index.php");
         }
 
+    }
+
+    public function isSomeoneHere() {
+        return ($this->session->read("auth") ? TRUE : FALSE);
+    }
+
+    public function getUserID($db, $username) {
+        $id = $db->query("SELECT id FROM users WHERE username = ?", [
+            $username
+        ]);
+        return ($id->fetch(PDO::FETCH_COLUMN, 0));
+    }
+
+    public function getUserEmail($db, $username) {
+        $id = $db->query("SELECT email FROM users WHERE username = ?", [
+            $username
+        ]);
+        return ($id->fetch(PDO::FETCH_COLUMN, 0));
     }
 
     public function actualUser() {
@@ -106,6 +125,14 @@ class Auth {
 
     public function checkResetToken($db, $user_id, $token) {
         return $db->query("SELECT * FROM users WHERE id = ? AND reset_token IS NOT NULL AND reset_token = ? AND reseted_at > DATE_SUB(NOW(), INTERVAL 30 MINUTE)", [$user_id, $token])->fetch();
+    }
+
+    public function checkCommentToken($db, $user_id) {
+        return (($db->query("SELECT send_mail_comment FROM users WHERE id = ?", [$user_id])->fetch(PDO::FETCH_COLUMN, 0)) == 1 ? true : false);
+    }
+
+    public function changeCommentToken($db, $username, $value) {
+        $db->query("UPDATE `users` SET `send_mail_comment` = ? WHERE `username` = ?", [$value, $username]);
     }
 
 }

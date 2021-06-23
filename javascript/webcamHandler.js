@@ -75,37 +75,8 @@ function picCreate(canvas) {
   context2D.drawImage(image, 0, 0, side, side);
 }
 
-function picTake() {
-  // SNAPSHOT VIDEO TO HTML CANVAS
-  var canvas = document.createElement("canvas")
-  picCreate(canvas);
- 
-  // PUT SNAPSHOT INTO WRAPPER
-  var wrap = document.getElementById("picResultZone");
-  wrap.innerHTML = "";
-  wrap.appendChild(canvas);
-}
-
-function picDown () {
-  // CREATE SNAPSHOT FROM VIDEO
-  var canvas = document.createElement("canvas")
-  picCreate(canvas);
-
-  // CREATE DOWNLOAD LINK
-  var wrap = document.getElementById("picResultZone"),
-      anchor = document.createElement("a");
-  anchor.href = canvas.toDataURL("image/png");
-  anchor.download = "webcam.png";
-  anchor.innerHTML = "Click to download";
-  wrap.innerHTML = "";
-  wrap.appendChild(anchor);
-
-  // AUTOMATIC DOWNLOAD - MAY NOT WORK ON SOME BROWSERS
-  anchor.click();
-}
-
 function picUp () {
-  if(videoElement.style.display == "block" || (picElement.style.display == "block" && picElement.src))
+  if (filterElement.src && (videoElement.style.display == "block" || (picElement.style.display == "block" && picElement.src)))
   {
     // CREATE SNAPSHOT FROM VIDEO
     var canvas = document.createElement("canvas"),
@@ -138,13 +109,8 @@ function picUp () {
       .catch(err => {
         alert(err);
       });
-      // var xhr = new XMLHttpRequest();
-      // xhr.open('POST', "upload.php");
-      // xhr.onload = function(){ alert("Nice Pic Bro'"); };
-      // xhr.send(data);
 
     });
-      // console.log("FILES = " + $_FILES["upimage"]["tmp_name"]);
       setTimeout(function (){
         location.reload();      
       }, 1000);

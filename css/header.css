@@ -3,15 +3,11 @@
     font-family: sans-serif;
 }
 
-body
-{
-    margin: 0px;
-}
-
 #website-title
 {
     text-decoration: none;
     color: black;
+    font-size: 3vw;
 }
 
 header
