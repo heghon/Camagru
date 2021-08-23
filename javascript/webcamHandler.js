@@ -1,14 +1,5 @@
-// var video = document.querySelector("#videoFeed");
+// Definition of important general variables.
 
-// if (navigator.mediaDevices.getUserMedia) {
-//   navigator.mediaDevices.getUserMedia({ video: true })
-//     .then(function (stream) {
-//       video.srcObject = stream;
-//     })
-//     .catch(function (err0r) {
-//       console.log("Something went wrong!");
-//     });
-// } 
 var videoRunning = false;
 var filterElement = document.getElementById("positionnedFilter");
 var videoElement = document.getElementById("videoFeed");
@@ -18,25 +9,18 @@ videoElement.style.display = "none";
 insertImageButton.style.display = "block";
 picElement.style.display = "block";
 
+// This function launches the webcam stream if the user allows it and put all the elements at their right places.
+// If the access is denied, an message is diplayed.
+
 window.addEventListener("load", function(){
-  // ASK FOR USER PERMISSION TO ACCESS CAMERA AFTER CHECKING IF THE CAMERA WORKS
 
   document.getElementById("picUp").onclick = picUp;
 
   navigator.mediaDevices.getUserMedia({
-    //  THE EASY WAY
     video: true
-
-    // TO SPECIFY PREFERRED RESOLUTION
-    // video: {
-    //   width: { min: 852, ideal: 1280, max: 1920 },
-    //   height: { min: 480, ideal: 720, max: 1080 }
-    // }
   })
 
-  // ON GETTING CAMERA ACCESS
   .then(function(stream) {
-    //  STREAM WEBCAM TO VIDEO TAG
     var video = document.getElementById("videoFeed");
     video.srcObject = stream;
     video.play();
@@ -44,16 +28,14 @@ window.addEventListener("load", function(){
     videoElement.style.display = "block";
     picElement.style.display = "none";
     insertImageButton.style.display = "none";
-    // ENABLE DEMO BUTTONS
-    // document.getElementById("picTake").onclick = picTake;
-    // document.getElementById("picDown").onclick = picDown;
   })
 
-  // FAILURE - NO WEBCAM ATTACHED AND/OR NO PERMISSION
   .catch(function(err) {
     alert("Please enable access and/or attach a webcam");
   });
 });
+
+// This function allows the user to preview the chosen image if the webcam wasn't allowed.
 
 function preview_image(event) 
 {
@@ -66,19 +48,15 @@ var reader = new FileReader();
   reader.readAsDataURL(event.target.files[0]);
 }
 
-function picCreate(canvas) {
-  var side = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
-    image = videoRunning ? document.getElementById("videoFeed") : document.getElementById("outputImage"),
-    context2D = canvas.getContext("2d");
-  canvas.width = side;
-  canvas.height = side;
-  context2D.drawImage(image, 0, 0, side, side);
-}
+// This function takes a picture and upload it on the database.
+// First, (1) it creates a snapshot from the video (or the chosen image) with a filter applied (mandatory).
+// Then, (2) there is a conversion to blob data, in order to finally (3) upload it via an ajax protocol.
+// At last, (4) the page is reloaded in order to see the new picture that was taken.
 
 function picUp () {
   if (filterElement.src && (videoElement.style.display == "block" || (picElement.style.display == "block" && picElement.src)))
   {
-    // CREATE SNAPSHOT FROM VIDEO
+    // (1)
     var canvas = document.createElement("canvas"),
       elementWidth = videoRunning ? document.getElementById("videoFeed").clientWidth : document.getElementById("outputImage").clientWidth,
       elementHeight = videoRunning ? document.getElementById("videoFeed").clientHeight : document.getElementById("outputImage").clientHeight,
@@ -93,13 +71,12 @@ function picUp () {
     context2D.drawImage(filterElement, (elementWidth / 2) - (filterWidth / 2), (elementHeight / 2) - (filterHeight / 2), filterWidth, filterHeight);
 
 
-    // CONVERT TO BLOB + UPLOAD
+    // (2)
     canvas.toBlob(function(blob){
-      // FORM DATA
       var fd = new FormData();
       fd.append('upimage', blob);
 
-      // AJAX UPLOAD
+      // (3)
       fetch('/upload.php', {method:"POST", body:fd})
       .then(response => {
         if (response.ok) return response;
@@ -111,6 +88,7 @@ function picUp () {
       });
 
     });
+    // (4)
       setTimeout(function (){
         location.reload();      
       }, 1000);

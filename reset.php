@@ -1,5 +1,10 @@
+<!-- This page is used when the user's password has been forgotten and a reset has been asked -->
+<!-- The php part uses a form and the GET/POST data to fetch the reset token/new password of the user -->
+<!-- If the given password is different from the previous one, and correctly validated, then it is changed in the database -->
+<!-- Finally, a message is written for the user -->
+
 <?php
-require_once "config/bootstrap.php";
+    require_once "config/bootstrap.php";
     if (isset($_GET["id"]) && isset($_GET["token"])) {
         $db = App::getDatabase();
         $auth = App::getAuth();
@@ -25,7 +30,7 @@ require_once "config/bootstrap.php";
             }
         }
         else {
-            $session->setFlash("danger", "Désolé, mais ce token n'est pas valide.");
+            $session->setFlash("danger", "Désolé, vous n'êtes pas autorisé à visiter cette page.");
             App::redirect("login.php");
         }
     }

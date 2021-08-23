@@ -1,3 +1,7 @@
+<!-- This page is used to confirm if the user's account is validated and its informations are in the database  -->
+<!-- This page can be reached by everyone but there's an automatic redirection, and without the proper token, nothing will happen  -->
+<!-- With the proper token, the user's account will be confirmed in the database and a message is displayed to give the information -->
+
 <?php
     require_once "config/bootstrap.php";
 

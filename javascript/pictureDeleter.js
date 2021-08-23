@@ -1,7 +1,7 @@
-// console.log(document.getElementsByClassName("deleteImageButton"));
+// This function uses ajax function fetch to delete an image from the database by using the php file deleteImage.php.
+// Then the page is reloaded to see the result.
 
 function deleteImage(id) {
-    // console.log(id);
     fetch('/deleteImage.php?id=' + id + '', {method:"GET"})
     .then(response => {
       if (response.ok) return response;

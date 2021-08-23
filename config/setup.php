@@ -1,4 +1,9 @@
 <?php
+
+    // This specific file creates the database using the pdo interface and using the variables of database.php.
+    // It creates 4 tables : users, pictures, comments and likes.
+    // It is called when the user is on the index page.
+
     require_once 'database.php';
 
     try {

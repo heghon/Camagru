@@ -1,3 +1,6 @@
+<!-- Index of the website, this is the entry point for the user -->
+<!-- When this is the first time the website is launched, there is a call to create the database, which occurs only once -->
+
 <?php
 require_once "config/bootstrap.php";
 ?>

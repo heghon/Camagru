@@ -1,17 +1,21 @@
+<!-- This page is used to modify informations of the user's account, such as email address, password, username and if yes or no a email is sent for a comment done under one of the user's pic -->
+<!-- This page cannot be reached if the actual user isn't connected -->
+<!-- In order to work, the page uses some forms and the php part uses the POST data to fetch the different informations given by the user -->
+<!-- The data is checked to fit the requirements and then, the user's profile is modified accordingly -->
+
 <?php
     require_once "config/bootstrap.php";
     $session = Session::getInstance();
     $auth = App::getAuth();
     $db = App::getDatabase();
     $validator = new Validator($_POST);
+
+    $auth->restrict();
+
     if ($auth->actualUser()) {
         $auth->connect($db->query("SELECT * FROM users WHERE id = {$auth->actualUser()->id}")->fetch());
     }
     $user = $auth->actualUser();
-    // var_dump($user["username"]);
-    //die();
-
-    $auth->restrict();
 
     if (!empty($_POST["password"])) {
         if (htmlentities($_POST["password"], ENT_QUOTES) !== htmlentities($_POST["password_confirm"], ENT_QUOTES)) {

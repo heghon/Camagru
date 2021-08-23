@@ -1,3 +1,8 @@
+<!-- This page is used to take filtered pictures with a webcam or (if no webcam available) to take a already taken picture from the user and apply a filter -->
+<!-- This page cannot be reached if the actual user isn't connected -->
+<!-- In order to work, the page uses some scripts to start a video stream, take the picture, upload it using ajax and delete it -->
+<!-- The php part will only help display the pictures of the user -->
+
 <?php
     require_once "config/bootstrap.php";
     $session = Session::getInstance();
@@ -8,17 +13,8 @@
     $auth->restrict("restriction_msg_assembly");
 
     $actualUserPseudo = $auth->actualUser()->username;
-    // var_dump($actualUserPseudo);
 
     $userIDs = $picture->getUserPicsID($db, $actualUserPseudo);
-    // var_dump($userIDs);
-
-    // SET THE DESTINATION FOLDER
-    // $source = $_FILES["upimage"]["tmp_name"];
-    // $destination = "uploaded.png";
-
-    // MOVE UPLOADED FILE TO DESTINATION
-    // echo move_uploaded_file($source, $destination) ? "OK" : "ERROR UPLOADING";
 ?>
 
 <html lang="fr">
@@ -43,7 +39,6 @@
                     </div>
                 </aside>
                 <div id="picContainer">
-                    <!-- <canvas id="canvas"></canvas> -->
                     <img id="outputImage"/>
                     <video autoplay="true" id="videoFeed"></video>
                     <img id="positionnedFilter"/>

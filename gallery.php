@@ -1,3 +1,9 @@
+<!-- This page is used to display all of the pictures taken by the users, with the comments and the likes -->
+<!-- This page can be reached by everyone but only a connected user can leave a comment or like a picture -->
+<!-- The php part uses some forms and the POST method in order to upload comments in the database or put/remove a like from a picture -->
+<!-- The pagination is also implemented here and 5 pictures are displayed by page (can be changed) -->
+<!-- The printPics function displays what needs to be displayed automatically (picture, thumb up or down, comments...) -->
+
 <?php
     require_once "config/bootstrap.php";
     $session = Session::getInstance();
@@ -32,10 +38,11 @@
     $byPage = 5;
     $nbrPages = ceil($nbrPictures / $byPage);
 
-    if(null !== htmlentities($_GET['page'], ENT_QUOTES) && !empty($_GET['page']) && is_numeric(htmlentities($_GET['page'], ENT_QUOTES))
-        && htmlentities($_GET['page'], ENT_QUOTES) <= $nbrPages && htmlentities($_GET['page'], ENT_QUOTES) > 0){
+    if (null !== htmlentities($_GET['page'], ENT_QUOTES) && !empty($_GET['page']) && is_numeric(htmlentities($_GET['page'], ENT_QUOTES))
+        && htmlentities($_GET['page'], ENT_QUOTES) <= $nbrPages && htmlentities($_GET['page'], ENT_QUOTES) > 0) {
         $currentPage = (int) strip_tags(htmlentities($_GET['page'], ENT_QUOTES));
-    }else{
+    }
+    else {
         $currentPage = 1;
     }
 
@@ -95,26 +102,6 @@
             }
         };
     }
-
-    // <form method="post" class="thumbForm" action="/gallery.php?page=' . $currentPage . '">
-    // <button type="submit" value="' . $picturesIDs[$i] . '" class="thumbUp" name="likeAPic" title="like"><img class="thumbPic" src="/filters/thumbDown.png" alt="" /></button>
-    // </form>
-
-
-    // <form method="post" action="/gallery.php?page=' . $currentPage . '">
-    //     <p>
-    //         <label>Commentaire</label>: <input type="text" maxlength="254" name="' . $picturesIDs[$i] . '" class="commentTextBar" required placeholder="Ex : Quelle belle photo !"/>
-    //         <input type="submit" value="Envoyer" />
-    //     </p>
-    // </form>
-
-    // <input type="submit" name="likeAPic" value="' . $picturesIDs[$i] . '" class="thumbUp" id="thumb' . $picturesIDs[$i] . '" alt="ThumbUp">
-
-    // var_dump($auth->isSomeoneHere());
-
-    // $IDs = $picture->getPicsID($db, $actualUserPseudo);
-    // var_dump($picturesIDs);
-    // var_dump($picture->getAuthor($db, 30));
 ?>
 
 <html lang="fr">
@@ -126,22 +113,9 @@
         <?php require_once 'elements/header.php'; ?>
             <div class="content">
                 <div id="galleryZone">
-                <?php
-                    printPics($auth, $comments, $picture, $db, $picturesIDs, $commentsIDs, $first, $byPage, $currentPage, $likes, $actualUserPseudo);
-                ?>
-                    <!-- <div id="pic30" class="galleryBox"> -->
-                        
-                    <!-- </div>
-                    <div id="pic30" class="galleryBox">
-                        <img src="image.php?id=30" class="galleryPic" alt="">
-                    </div>
-                    <div id="pic30" class="galleryBox">
-                        <img src="image.php?id=30" class="galleryPic" alt="">
-                    </div>
-                    <div id="pic30" class="galleryBox">
-                        <img src="image.php?id=30" class="galleryPic" alt="">
-                    </div> -->
-                <!-- </div> -->
+                    <?php
+                        printPics($auth, $comments, $picture, $db, $picturesIDs, $commentsIDs, $first, $byPage, $currentPage, $likes, $actualUserPseudo);
+                    ?>
                 </div>
                 <nav>
                     <div id="paginationButtons">

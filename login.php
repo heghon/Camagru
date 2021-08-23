@@ -1,3 +1,8 @@
+<!-- This page is used by users to log in and be connected -->
+<!-- The php part uses a form and the POST data to fetch the email address/username and the password the user gave -->
+<!-- If the given email address/username and the password are indeed in the database and are a match, the user is then logged in and can access all the website content -->
+<!-- A connection by cookie can be done if the box was previously checked -->
+
 <?php
     require_once "config/bootstrap.php";
 
@@ -36,7 +41,6 @@
 
                 <?php if (!empty($errors)): ?>
                     <div class="alert">
-                    <p>Certains champs ne sont pas conformes : </p>
                     <?php foreach($errors as $error): ?>
                         <li><?= $error; ?></li>
                     <?php endforeach ?>   
